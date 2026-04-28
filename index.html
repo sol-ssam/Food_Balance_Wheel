@@ -82,20 +82,7 @@
             font-size: 2rem;
             box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
-
-        #coord-display {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.8);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-size: 14px;
-            z-index: 500;
-            pointer-events: none;
-        }
+        
     </style>
 </head>
 <body class="p-6 flex flex-col items-center min-h-screen">
@@ -227,28 +214,7 @@
                             </div>
                         </div>
 
-                        <div class="grid gap-3 text-slate-700 font-bold">
-                            <label class="quiz-label flex items-start gap-3 bg-white p-4 rounded-2xl cursor-pointer hover:bg-blue-50 transition border-2 border-transparent" data-value="water">
-                                <input type="checkbox" class="quiz-option mt-1 w-5 h-5 accent-blue-600" value="water" onchange="checkQuizAnswer()">
-                                <span>물을 충분히 마시는 생활을 실천하자는 의미가 있다.</span>
-                            </label>
-                            <label class="quiz-label flex items-start gap-3 bg-white p-4 rounded-2xl cursor-pointer hover:bg-blue-50 transition border-2 border-transparent" data-value="onefood">
-                                <input type="checkbox" class="quiz-option mt-1 w-5 h-5 accent-blue-600" value="onefood" onchange="checkQuizAnswer()">
-                                <span>좋아하는 식품군 한 가지만 많이 먹으면 된다는 의미이다.</span>
-                            </label>
-                            <label class="quiz-label flex items-start gap-3 bg-white p-4 rounded-2xl cursor-pointer hover:bg-blue-50 transition border-2 border-transparent" data-value="variety">
-                                <input type="checkbox" class="quiz-option mt-1 w-5 h-5 accent-blue-600" value="variety" onchange="checkQuizAnswer()">
-                                <span>다양한 식품군의 음식을 골고루 먹자는 의미가 있다.</span>
-                            </label>
-                            <label class="quiz-label flex items-start gap-3 bg-white p-4 rounded-2xl cursor-pointer hover:bg-blue-50 transition border-2 border-transparent" data-value="exercise">
-                                <input type="checkbox" class="quiz-option mt-1 w-5 h-5 accent-blue-600" value="exercise" onchange="checkQuizAnswer()">
-                                <span>건강을 위해 운동도 함께 실천하자는 의미가 있다.</span>
-                            </label>
-                            <label class="quiz-label flex items-start gap-3 bg-white p-4 rounded-2xl cursor-pointer hover:bg-blue-50 transition border-2 border-transparent" data-value="snack">
-                                <input type="checkbox" class="quiz-option mt-1 w-5 h-5 accent-blue-600" value="snack" onchange="checkQuizAnswer()">
-                                <span>간식과 단 음식을 충분히 먹어 에너지를 채우자는 의미이다.</span>
-                            </label>
-                        </div>
+                       <div id="quiz-container" class="grid gap-3 text-slate-700 font-bold"></div>
 
                         <div id="quiz-message" class="mt-5 rounded-2xl bg-white px-5 py-4 text-center text-sm lg:text-base font-black text-slate-500 border-2 border-slate-100">
                             정답을 모두 고르면 저장 버튼이 활성화됩니다.
@@ -272,7 +238,7 @@
 
     <script>
         const foods = [
-            { name: "찰기장", category: "곡류", emoji: "🌾" },
+            { name: "옥수수", category: "곡류", emoji: "🌽" },
             { name: "시리얼", category: "곡류", emoji: "🥣" },  
             { name: "햇반", category: "곡류", emoji: "🍚" },
             { name: "통밀", category: "곡류", emoji: "🍞" },
@@ -284,7 +250,7 @@
             { name: "서리태콩", category: "고생달콩", emoji: "🫘" },
             { name: "견과류", category: "고생달콩", emoji: "🥜" },
             { name: "치킨", category: "고생달콩", emoji: "🍗" },
-            { name: "굴비/갈치", category: "고생달콩", emoji: "🐟" },
+            { name: "굴비", category: "고생달콩", emoji: "🐟" },
             { name: "김치", category: "채소류", emoji: "🥬" },
             { name: "김", category: "채소류", emoji: "🍙" },
             { name: "미역", category: "채소류", emoji: "🪸" },
@@ -350,12 +316,50 @@
             }
         }
 
+        const quizOptions = [
+            { value: "water", text: "물을 충분히 마시는 생활을 실천하자는 의미가 있다.", correct: true },
+            { value: "onefood", text: "좋아하는 식품군 한 가지만 많이 먹으면 된다는 의미이다.", correct: false },
+            { value: "variety", text: "다양한 식품군의 음식을 골고루 먹자는 의미가 있다.", correct: true },
+            { value: "exercise", text: "건강을 위해 운동도 함께 실천하자는 의미가 있다.", correct: true },
+            { value: "snack", text: "간식과 단 음식을 충분히 먹어 에너지를 채우자는 의미이다.", correct: false }
+        ];
+        
+        let shuffledQuiz = [];
+
+        function renderQuiz() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = "";
+            
+            shuffledQuiz.forEach((q) => {
+                const item = document.createElement('label');
+                item.className = "quiz-label flex items-start gap-3 bg-white p-4 rounded-2xl cursor-pointer hover:bg-blue-50 transition border-2 border-transparent";
+                item.dataset.value = q.value;
+                
+                item.innerHTML = `
+                    <input type="checkbox" class="quiz-option mt-1 w-5 h-5 accent-blue-600" value="${q.value}" onchange="checkQuizAnswer()">
+                    <span>${q.text}</span>
+                `;
+                
+                container.appendChild(item);
+            });
+
+            //추가 (안전장치)
+            document.querySelectorAll('.quiz-option').forEach(input => {
+                input.checked = false;
+            });
+        }
+
         function showFinishState() {
             document.getElementById('shop-controls').classList.add('hidden');
             document.getElementById('finish-controls').classList.remove('hidden');
         }
 
         function openSuccessModal() {
+            shuffledQuiz = [...quizOptions].sort(() => Math.random() - 0.5);
+            renderQuiz(); // 보기 다시 그리기
+
+            checkQuizAnswer(); //버튼/피드백/핵심정리 초기화
+            
             document.getElementById('success-modal').classList.remove('hidden');
         }
 
@@ -410,7 +414,7 @@
                 }
             }
         }
-
+        
         function isPointInPoly(polyPoints, ptX, ptY) {
             let inside = false;
             for (let i = 0, j = polyPoints.length - 1; i < polyPoints.length; j = i++) {
