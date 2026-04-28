@@ -187,22 +187,83 @@
     </div>
 
     <!-- 성공 모달 -->
-    <div id="success-modal" class="fixed inset-0 bg-slate-900/90 hidden flex items-center justify-center z-[200] backdrop-blur-lg">
-        <div class="bg-white rounded-[4rem] p-16 max-w-xl w-full text-center shadow-2xl scale-95 transition-transform border-b-8 border-blue-500 relative">
+    <div id="success-modal" class="fixed inset-0 bg-slate-900/90 hidden flex items-center justify-center z-[200] backdrop-blur-lg p-4">
+        <div class="bg-white rounded-[3rem] p-8 lg:p-10 max-w-5xl w-full shadow-2xl transition-transform border-b-8 border-blue-500 relative max-h-[92vh] overflow-y-auto">
             <!-- 닫기 버튼 (X) -->
-            <button onclick="closeSuccessModal()" class="absolute top-8 right-10 text-slate-400 hover:text-slate-600 transition-colors text-4xl font-bold p-2">✕</button>
-            
-            <div class="text-9xl mb-8">🏅</div>
-            <h2 class="text-5xl font-black text-slate-900 leading-tight">분류 완료!</h2>
-            <p class="text-slate-500 mt-6 text-xl font-medium leading-relaxed">자전거에 모든 식품을 담았습니다.<br>나만의 건강 자전거를 저장해보세요!</p>
-            
-            <div class="grid grid-cols-2 gap-4 mt-12">
-                <button id="btn-download" onclick="downloadResult()" class="bg-green-600 hover:bg-green-700 text-white font-black py-6 rounded-[2rem] text-xl shadow-xl transition-all flex items-center justify-center gap-2">
-                    💾 이미지 저장하기
-                </button>
-                <button onclick="location.reload()" class="bg-blue-600 hover:bg-blue-700 text-white font-black py-6 rounded-[2rem] text-xl shadow-xl transition-all">
-                    🔄 다시 하기
-                </button>
+            <button onclick="closeSuccessModal()" class="absolute top-6 right-8 text-slate-400 hover:text-slate-700 transition-colors text-4xl font-black p-2 z-10">✕</button>
+
+            <div class="grid lg:grid-cols-12 gap-8 items-stretch">
+                <!-- 왼쪽 안내 영역 -->
+                <div class="lg:col-span-5 bg-gradient-to-br from-orange-50 to-blue-50 rounded-[2.5rem] p-8 flex flex-col justify-center text-center lg:text-left border-4 border-white">
+                    <div class="text-7xl mb-5 text-center lg:text-left">🏅</div>
+                    <p class="text-sm font-black text-blue-600 mb-2 tracking-widest">MISSION CLEAR</p>
+                    <h2 class="text-4xl lg:text-5xl font-black text-slate-900 leading-tight">축하해요!</h2>
+                    <p class="text-slate-600 mt-5 text-lg lg:text-xl font-bold leading-relaxed">
+                        식품구성자전거를 모두 완성했어요.<br>
+                        마지막 퀴즈를 맞히면 완성된<br>이미지를 저장할 수 있어요!
+                    </p>
+
+                    <div id="core-summary" class="hidden mt-7 bg-white/80 rounded-[2rem] p-5 text-left shadow-sm">
+                        <h3 class="font-black text-slate-800 mb-3">🚲 기억할 핵심</h3>
+                        <div class="grid gap-2 text-sm font-bold text-slate-600">
+                            <div class="flex items-center gap-2"><span>💧</span><span>물 충분히 마시기</span></div>
+                            <div class="flex items-center gap-2"><span>🥗</span><span>골고루 먹기</span></div>
+                            <div class="flex items-center gap-2"><span>🏃</span><span>운동하기</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 오른쪽 퀴즈 영역 -->
+                <div class="lg:col-span-7 flex flex-col">
+                    <div class="bg-slate-50 border-4 border-slate-100 rounded-[2.5rem] p-6 lg:p-7 text-left flex-1">
+                        <div class="flex items-start justify-between gap-4 mb-5">
+                            <div>
+                                <p class="text-xs font-black text-orange-500 tracking-widest mb-2">FINAL QUIZ</p>
+                                <h3 class="text-2xl font-black text-slate-800 leading-snug">식품구성자전거의 의미로 맞는 설명을 모두 고르시오.</h3>
+                            </div>
+                            <div class="shrink-0 bg-white rounded-2xl px-4 py-3 text-center shadow-sm border border-slate-100">
+                                <div class="text-xs font-black text-slate-400">MISSION</div>
+                                <div class="text-xl font-black text-orange-500">QUIZ</div>
+                            </div>
+                        </div>
+
+                        <div class="grid gap-3 text-slate-700 font-bold">
+                            <label class="quiz-label flex items-start gap-3 bg-white p-4 rounded-2xl cursor-pointer hover:bg-blue-50 transition border-2 border-transparent" data-value="water">
+                                <input type="checkbox" class="quiz-option mt-1 w-5 h-5 accent-blue-600" value="water" onchange="checkQuizAnswer()">
+                                <span>물을 충분히 마시는 생활을 실천하자는 의미가 있다.</span>
+                            </label>
+                            <label class="quiz-label flex items-start gap-3 bg-white p-4 rounded-2xl cursor-pointer hover:bg-blue-50 transition border-2 border-transparent" data-value="onefood">
+                                <input type="checkbox" class="quiz-option mt-1 w-5 h-5 accent-blue-600" value="onefood" onchange="checkQuizAnswer()">
+                                <span>좋아하는 식품군 한 가지만 많이 먹으면 된다는 의미이다.</span>
+                            </label>
+                            <label class="quiz-label flex items-start gap-3 bg-white p-4 rounded-2xl cursor-pointer hover:bg-blue-50 transition border-2 border-transparent" data-value="variety">
+                                <input type="checkbox" class="quiz-option mt-1 w-5 h-5 accent-blue-600" value="variety" onchange="checkQuizAnswer()">
+                                <span>다양한 식품군의 음식을 골고루 먹자는 의미가 있다.</span>
+                            </label>
+                            <label class="quiz-label flex items-start gap-3 bg-white p-4 rounded-2xl cursor-pointer hover:bg-blue-50 transition border-2 border-transparent" data-value="exercise">
+                                <input type="checkbox" class="quiz-option mt-1 w-5 h-5 accent-blue-600" value="exercise" onchange="checkQuizAnswer()">
+                                <span>건강을 위해 운동도 함께 실천하자는 의미가 있다.</span>
+                            </label>
+                            <label class="quiz-label flex items-start gap-3 bg-white p-4 rounded-2xl cursor-pointer hover:bg-blue-50 transition border-2 border-transparent" data-value="snack">
+                                <input type="checkbox" class="quiz-option mt-1 w-5 h-5 accent-blue-600" value="snack" onchange="checkQuizAnswer()">
+                                <span>간식과 단 음식을 충분히 먹어 에너지를 채우자는 의미이다.</span>
+                            </label>
+                        </div>
+
+                        <div id="quiz-message" class="mt-5 rounded-2xl bg-white px-5 py-4 text-center text-sm lg:text-base font-black text-slate-500 border-2 border-slate-100">
+                            정답을 모두 고르면 저장 버튼이 활성화됩니다.
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 mt-5">
+                        <button id="btn-download" onclick="downloadResult()" disabled class="bg-slate-300 text-white font-black py-5 rounded-[2rem] text-lg lg:text-xl shadow-xl transition-all flex items-center justify-center gap-2 cursor-not-allowed opacity-60">
+                            🔒 퀴즈를 풀면 저장 가능
+                        </button>
+                        <button onclick="location.reload()" class="bg-blue-600 hover:bg-blue-700 text-white font-black py-5 rounded-[2rem] text-lg lg:text-xl shadow-xl transition-all">
+                            🔄 다시 하기
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -233,7 +294,7 @@
             { name: "표고버섯", category: "채소류", emoji: "🍄" },
             { name: "사과", category: "과일류", emoji: "🍎" },
             { name: "딸기", category: "과일류", emoji: "🍓" },
-            { name: "참외", category: "과일류", emoji: "🍈" },
+            { name: "멜론", category: "과일류", emoji: "🍈" },
             { name: "애플망고", category: "과일류", emoji: "🥭" },
             { name: "우유", category: "우유·유제품류", emoji: "🥛" },
             { name: "요플레", category: "우유·유제품류", emoji: "🍦" },
@@ -300,6 +361,54 @@
 
         function closeSuccessModal() {
             document.getElementById('success-modal').classList.add('hidden');
+        }
+
+        function checkQuizAnswer() {
+            const correctAnswers = ['water', 'variety', 'exercise'];
+            const selected = Array.from(document.querySelectorAll('.quiz-option:checked')).map(option => option.value);
+            const btn = document.getElementById('btn-download');
+            const message = document.getElementById('quiz-message');
+            const coreSummary = document.getElementById('core-summary');
+
+            const hasWrongAnswer = selected.some(answer => !correctAnswers.includes(answer));
+            const hasAllCorrect = correctAnswers.every(answer => selected.includes(answer));
+            const isCorrect = selected.length === correctAnswers.length && hasAllCorrect && !hasWrongAnswer;
+
+            document.querySelectorAll('.quiz-label').forEach(label => {
+                const input = label.querySelector('.quiz-option');
+                label.classList.remove('bg-green-50', 'border-green-400', 'bg-red-50', 'border-red-400', 'ring-2', 'ring-green-100', 'ring-red-100');
+
+                if (input.checked && correctAnswers.includes(input.value)) {
+                    label.classList.add('bg-green-50', 'border-green-400', 'ring-2', 'ring-green-100');
+                } else if (input.checked && !correctAnswers.includes(input.value)) {
+                    label.classList.add('bg-red-50', 'border-red-400', 'ring-2', 'ring-red-100');
+                }
+            });
+
+            if (isCorrect) {
+                btn.disabled = false;
+                btn.innerText = '💾 이미지 저장하기';
+                btn.className = 'bg-green-600 hover:bg-green-700 text-white font-black py-5 rounded-[2rem] text-lg lg:text-xl shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer opacity-100 active:scale-95';
+                message.innerText = '좋아요! 식품구성자전거의 의미를 잘 이해했어요.';
+                message.className = 'mt-5 rounded-2xl bg-green-50 px-5 py-4 text-center text-sm lg:text-base font-black text-green-700 border-2 border-green-200';
+                if (coreSummary) coreSummary.classList.remove('hidden');
+            } else {
+                btn.disabled = true;
+                btn.innerText = '🔒 퀴즈를 풀면 저장 가능';
+                btn.className = 'bg-slate-300 text-white font-black py-5 rounded-[2rem] text-lg lg:text-xl shadow-xl transition-all flex items-center justify-center gap-2 cursor-not-allowed opacity-60';
+                if (coreSummary) coreSummary.classList.add('hidden');
+
+                if (selected.length === 0) {
+                    message.innerText = '정답을 모두 고르면 저장 버튼이 활성화됩니다.';
+                    message.className = 'mt-5 rounded-2xl bg-white px-5 py-4 text-center text-sm lg:text-base font-black text-slate-500 border-2 border-slate-100';
+                } else if (hasWrongAnswer) {
+                    message.innerText = '식품구성자전거의 의미와 맞지 않는 설명이 포함되어 있어요.';
+                    message.className = 'mt-5 rounded-2xl bg-red-50 px-5 py-4 text-center text-sm lg:text-base font-black text-red-600 border-2 border-red-200';
+                } else {
+                    message.innerText = '아직 모든 의미를 완성하지 못했어요.';
+                    message.className = 'mt-5 rounded-2xl bg-blue-50 px-5 py-4 text-center text-sm lg:text-base font-black text-blue-600 border-2 border-blue-200';
+                }
+            }
         }
 
         function isPointInPoly(polyPoints, ptX, ptY) {
